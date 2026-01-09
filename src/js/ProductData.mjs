@@ -9,14 +9,13 @@ function convertToJson(res) {
 export default class ProductData {
   constructor(category) {
     this.category = category;
-    this.baseUrl = "https://wdd330-sleepoutside-team11.onrender.com";
-    this.path = `${this.baseUrl}/json/${this.category}.json`;
+    this.path = `../json/${this.category}.json`;
   }
-
   getData() {
-    return fetch(this.path).then(convertToJson);
+    return fetch(this.path)
+      .then(convertToJson)
+      .then((data) => data);
   }
-
   async findProductById(id) {
     const products = await this.getData();
     return products.find((item) => item.Id === id);
