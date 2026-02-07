@@ -1,5 +1,12 @@
 import { getLocalStorage, setLocalStorage } from "./utils.mjs";
 
+/**At the moment, I'm learning about the need to create the product details class with the 
+ * constructor, init, addProductToCart and renderProductDetails functions for 
+ * 1. The product to keep track of some infos about itself
+ * 2. Those actions that need to happend before the  class can be used are placed in the init for instance event listeners
+ * 3. Ofcourse the addProductToCart to execute the main goal to add to cart
+ * 4. The  renderProductDetails is for dynamic rendering of each product details based on id value plased in the query URL
+ */
 export default class ProductDetails {
 
   constructor(productId, dataSource) {
@@ -31,6 +38,7 @@ export default class ProductDetails {
   }
 }
 
+//This function is mainly used render product details and place things in the cart.
 function productDetailsTemplate(product) {
   document.querySelector('h2').textContent = product.Brand.Name;
   document.querySelector('h3').textContent = product.NameWithoutBrand;
