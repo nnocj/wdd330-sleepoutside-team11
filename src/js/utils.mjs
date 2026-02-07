@@ -25,3 +25,14 @@ export function setClick(selector, callback) {
   });
   qs(selector).addEventListener("click", callback);
 }
+
+
+//getParam function
+//this function will be used to search the query string for a specific parameter and return its value.
+//I can use this function to get the product id from the query string, and use the id to find the product in the data source and display its details on the product page.
+export function getParam(param){
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  
+  return urlParams.get(param);
+}
