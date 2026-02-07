@@ -27,9 +27,9 @@ function addProductToCart(product) {
  Even though initially only one object could be stored, it was not displaying because I was trying to use the map on an object.
  */
 
-// add to cart button event handler
-async function addToCartHandler(e) {
-  const product = await dataSource.findProductById(e.target.dataset.id);
+async function addToCartHandler() {
+  const productId = getParam("product");
+  const product = await dataSource.findProductById(productId);
   addProductToCart(product);
 }
 

@@ -31,6 +31,7 @@ export default class ProductDetails {
   }
 }
 
+//This function is mainly used render product details and place things in the cart.
 function productDetailsTemplate(product) {
   document.querySelector('h2').textContent = product.Brand.Name;
   document.querySelector('h3').textContent = product.NameWithoutBrand;
