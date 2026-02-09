@@ -36,3 +36,12 @@ export function getParam(param){
   
   return urlParams.get(param);
 }
+
+
+export function renderListWithTemplate(templateFn, parentElement, list, position="afterbegin", clear=false) {
+  const htmlStrings = list.map(templateFn);//this is to create an array of html strings holding each product.
+  if (clear) {
+    parentElement.innerHTML = "";
+  }
+  parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
+}
