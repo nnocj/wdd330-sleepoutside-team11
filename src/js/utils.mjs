@@ -45,3 +45,32 @@ export function renderListWithTemplate(templateFn, parentElement, list, position
   }
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
+
+
+
+export function renderWithTemplate(templateFn, parentElement, data, callback) {
+  parentElement.innerHTML = templateFn;// All i do is to render the template in the parent element.
+  if (callback) {
+    callback(data);
+  }
+}
+
+//I'm not exporting this out directly.
+async function loadTemplate(path){
+   const res = await fetch(path);
+   const template = await res.text();
+   return template;
+}
+
+//I believe that qs is the new shortcut for document.querySelector.
+//I'm suing this function to load both the header and footer templates
+export async function loadHeaderFooter(){
+  const headerTemplate = await loadTemplate("../partials/header.html");// I changed to call the function directly
+  const footerTemplate = await loadTemplate("../partials/footer.html");
+
+  const headerElement = qs("#main-header");// I learned to be mindful of the rules for selecting
+  const footerElement = qs("#main-footer");
+
+  renderWithTemplate(headerTemplate, headerElement);
+  renderWithTemplate(footerTemplate, footerElement);
+}
