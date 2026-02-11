@@ -12,7 +12,7 @@ export default class ProdutList {
 
   async init() {
       // use the datasource to get the list of products from a category. findListByCategory will return a promise! use await or .then() to process it
-      const list = await this.dataSource.getData();
+      const list = await this.dataSource.getData(this.category);
 
       // render product list
       this.renderList(list);

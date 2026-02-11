@@ -7,6 +7,8 @@ import { getLocalStorage, setLocalStorage } from "./utils.mjs";
  * 3. Ofcourse the addProductToCart to execute the main goal to add to cart
  * 4. The  renderProductDetails is for dynamic rendering of each product details based on id value plased in the query URL
  */
+
+const baseURL = import.meta.env.VITE_SERVER_URL;// fetch from remote server
 export default class ProductDetails {
 
   constructor(productId, dataSource) {
