@@ -1,5 +1,5 @@
 import { renderListWithTemplate } from "./utils.mjs";
-
+/**mainly to populate the product gird both at the start and finish  */
 export default class ProdutList {
 
 

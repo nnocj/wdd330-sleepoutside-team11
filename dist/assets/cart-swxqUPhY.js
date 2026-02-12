@@ -1,7 +1,7 @@
-import{l as t,g as e}from"./utils-Diqr6REO.js";t();function s(){const r=(e("so-cart")||[]).map(c=>o(c));document.querySelector(".product-list").innerHTML=r.join("")}function o(a){return`<li class="cart-card divider">
+import{l as e,g as t}from"./utils-Diqr6REO.js";e();function s(){const r=(t("so-cart")||[]).map(c=>o(c));document.querySelector(".product-list").innerHTML=r.join("")}function o(a){return productImage=a.Images?a.Images.PrimaryMedium:a.Image,`<li class="cart-card divider">
   <a href="#" class="cart-card__image">
     <img
-      src="${a.Image}"
+      src="${productImage}"
       alt="${a.Name}"
     />
   </a>

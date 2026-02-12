@@ -7,12 +7,7 @@ import { loadHeaderFooter} from "./utils.mjs";
 loadHeaderFooter();
 //product section
 const listElement = document.querySelector('.product-list');
-//make it dynamic by getting the category from query string.
 
-//const dataSource = new ProductData("backpacks");
-//const productList = new ProductList("backpacks", dataSource, listElement);
-
-//productList.init();
 
 
 //category section to display the list of navs

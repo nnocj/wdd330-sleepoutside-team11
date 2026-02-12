@@ -1,13 +1,13 @@
-import{r as i,l as n}from"./utils-Diqr6REO.js";import{P as o}from"./ProductData-DxRgxSyt.js";class l{constructor(a,e,r){this.category=a,this.product={},this.dataSource=e,this.listElement=r}async init(){const a=await this.dataSource.getData();this.renderList(a)}renderList(a){i(d,this.listElement,a)}}function d(t){return t.Image?`<li class="product-card">
+import{r as i,l as n}from"./utils-Diqr6REO.js";import{P as o}from"./ProductData-WQnOFAAW.js";class l{constructor(a,e,r){this.category=a,this.product={},this.dataSource=e,this.listElement=r}async init(){const a=await this.dataSource.getData();this.renderList(a)}renderList(a){i(d,this.listElement,a)}}function d(t){return t.Images?`<li class="product-card">
             <a href="product_pages/?product=${t.Id}">
-              <img src="${t.Image}" alt="Image of ${t.NameWithoutBrand}">
+              <img src="${t.Images.PrimaryMedium}" alt="Image of ${t.NameWithoutBrand}">
                 <h2 class="card__brand">${t.Brand.Name}</h2>
                 <h3 class="card__name">${t.NameWithoutBrand}</h3>
                 <p class="product-card__price">$${t.FinalPrice}</p>
                 </a>
             </li>`:`<li class="product-card">
             <a href="product_pages/?product=${t.Id}">
-              <img src="${t.Images}" alt="Image of ${t.NameWithoutBrand}">
+              <img src="${t.Image}" alt="Image of ${t.NameWithoutBrand}">
                 <h2 class="card__brand">${t.Brand.Name}</h2>
                 <h3 class="card__name">${t.NameWithoutBrand}</h3>
                 <p class="product-card__price">$${t.FinalPrice}</p>
