@@ -38,12 +38,26 @@ export function getParam(param){
 }
 
 
+//I'm adding this funtion in other to find the query key in this case helpful for category
+export function getParamKey(){
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  return urlParams.keys().next().value;
+}
+
 export function renderListWithTemplate(templateFn, parentElement, list, position="afterbegin", clear=false) {
-  const htmlStrings = list.map(templateFn);//this is to create an array of html strings holding each product.
-  if (clear) {
-    parentElement.innerHTML = "";
+  
+  try{
+      const htmlStrings = list.map(templateFn);//this is to create an array of html strings holding each product.
+      if (clear) {
+          parentElement.innerHTML = "";
+        }
+      parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
   }
-  parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
+  catch{
+    return "data not available at the moment";
+  }
+  //with this I handle errors to provide a smoother exepereince using the app.
 }
 
 
@@ -73,4 +87,15 @@ export async function loadHeaderFooter(){
 
   renderWithTemplate(headerTemplate, headerElement);
   renderWithTemplate(footerTemplate, footerElement);
+}
+
+
+export async function loadCategories(list){
+  const categoryTemplate = `<li class="category-nav-item">
+                              <a href="category_pages/?category=${category.Id}">${category.Name}
+                                  <img src="${category.Image}" alt="Image of ${category.Name}">
+                              </a>
+                            </li>`;
+  const categoryElement = qs(".category-list");
+  renderListWithTemplate(categoryTemplate, categoryElement, list);
 }
