@@ -38,12 +38,26 @@ export function getParam(param){
 }
 
 
+//I'm adding this funtion in other to find the query key in this case helpful for category
+export function getParamKey(){
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  return urlParams.keys().next().value;
+}
+
 export function renderListWithTemplate(templateFn, parentElement, list, position="afterbegin", clear=false) {
-  const htmlStrings = list.map(templateFn);//this is to create an array of html strings holding each product.
-  if (clear) {
-    parentElement.innerHTML = "";
+  
+  try{
+      const htmlStrings = list.map(templateFn);//this is to create an array of html strings holding each product.
+      if (clear) {
+          parentElement.innerHTML = "";
+        }
+      parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
   }
-  parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
+  catch{
+    return "data not available at the moment";
+  }
+  //with this I handle errors to provide a smoother exepereince using the app.
 }
 
 
@@ -74,3 +88,41 @@ export async function loadHeaderFooter(){
   renderWithTemplate(headerTemplate, headerElement);
   renderWithTemplate(footerTemplate, footerElement);
 }
+
+
+export async function loadCategories(list){
+  const categoryTemplate = `<li class="category-nav-item">
+                              <a href="category_pages/?category=${category.Id}">${category.Name}
+                                  <img src="${category.Image}" alt="Image of ${category.Name}">
+                              </a>
+                            </li>`;
+  const categoryElement = qs(".category-list");
+  renderListWithTemplate(categoryTemplate, categoryElement, list);
+}
+
+
+//load product function
+export async function loadProductList(list) {
+
+  const parentElement = document.querySelector(".primary-list");
+ 
+  
+  list.map((product)=> {
+      
+      const productTemplate =
+        `<li class="product-card">
+            <a href="product_pages/?product=${product.Id}">
+              <img src="${product.Images ? product.Images.PrimaryMedium : product.Image}" alt="Image of ${product.NameWithoutBrand}">
+                <h2 class="card__brand">${product.Brand}</h2>
+                <h3 class="card__name">${product.NameWithoutBrand}</h3>
+                <p class="product-card__price">$${product.FinalPrice}</p>
+                </a>
+            </li>`
+          parentElement = productTemplate;
+       })
+       
+  
+}
+
+ 
+  
