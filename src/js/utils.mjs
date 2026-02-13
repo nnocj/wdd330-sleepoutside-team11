@@ -99,3 +99,30 @@ export async function loadCategories(list){
   const categoryElement = qs(".category-list");
   renderListWithTemplate(categoryTemplate, categoryElement, list);
 }
+
+
+//load product function
+export async function loadProductList(list) {
+
+  const parentElement = document.querySelector(".primary-list");
+ 
+  
+  list.map((product)=> {
+      
+      const productTemplate =
+        `<li class="product-card">
+            <a href="product_pages/?product=${product.Id}">
+              <img src="${product.Images ? product.Images.PrimaryMedium : product.Image}" alt="Image of ${product.NameWithoutBrand}">
+                <h2 class="card__brand">${product.Brand}</h2>
+                <h3 class="card__name">${product.NameWithoutBrand}</h3>
+                <p class="product-card__price">$${product.FinalPrice}</p>
+                </a>
+            </li>`
+          parentElement = productTemplate;
+       })
+       
+  
+}
+
+ 
+  

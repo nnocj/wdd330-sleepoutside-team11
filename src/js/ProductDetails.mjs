@@ -1,4 +1,5 @@
 import { getLocalStorage, setLocalStorage } from "./utils.mjs";
+import {convertToJson} from "./ProductData.mjs";
 
 /**At the moment, I'm learning about the need to create the product details class with the 
  * constructor, init, addProductToCart and renderProductDetails functions for 
@@ -8,32 +9,40 @@ import { getLocalStorage, setLocalStorage } from "./utils.mjs";
  * 4. The  renderProductDetails is for dynamic rendering of each product details based on id value plased in the query URL
  */
 export default class ProductDetails {
-
-  
-
+  //constructor functions like the parameter initializer
   constructor(productId, dataSource) {
     this.productId = productId;
     this.dataSource = dataSource;// this is gold
+    this.path = `../json/${this.dataSource.category}.json`;
+    this.productsByCategory = {};
     this.product = {};
     
   }
 
-  async getProduct() {
-    const res = await fetch(`../json/${this.dataSource.category}.json`);
-    const data = await res.json();
-    this.product = data.find(item => item.Id === Number(this.productId));
-  }
+
+  async findProductDataByProductId(id) {
+    const products= await fetch(this.path)
+    .then(convertToJson)
+    .then((data) => data.Result ? data.Result : data);// this is becasue some of api json file have staored the data i need in Result
+
+    return products.find(
+      // for standardization search
+      item => item.Id === id
+  )};
+
   
 
   async init() {
-    // use the datasource to get the details for the current product. findProductById will return a promise! use await or .then() to process it
-    this.product = await this.dataSource.findProductById(this.productId);
+   
+    this.product = await this.findProductDataByProductId(this.productId);
+
     // the product details are needed before rendering the HTML
+    console.log("Products by category:", this.findProductDataByProductId(this.productId));
+    console.log("Products:", this.product);
     console.log("ID:", this.productId);
     console.log("Datasource:", this.dataSource);
     console.log("Product category:", this.dataSource.category);
-    console.log("Data:", await fetch(`../json/${this.dataSource.category}.json`));
-
+    console.log("Brand:", this.product.Brand);
  
     
 
@@ -51,25 +60,11 @@ export default class ProductDetails {
     cartItems.push(this.product);
     setLocalStorage("so-cart", cartItems);
   }
-
-  async findProductById(id) {
-  const data = await this.getData();
-  return data.find(
-    item => item.Id.toString().toLowerCase() === id.toString().toLowerCase()// for standardiization
-  );
-}
-
-
   
   renderProductDetails() {
     productDetailsTemplate(this.product);
   }
 }
-
-
-/* now seeing that at least only the product id is successfully retrieved, i will therefore
-use the product id to fetch the product name or full product data from the source.*
-*/
 
 
 //This function is mainly used render product details and place things in the cart.

@@ -17,6 +17,7 @@ export default class  CategoryList {
   async init() {
       // use the datasource to get the list of categories from the json/category. 
       const list = await this.dataSource.getData();
+      console.log("category info", this.category);
 
       // render category list
       this.renderList(list);
