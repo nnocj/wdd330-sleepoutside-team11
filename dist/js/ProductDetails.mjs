@@ -1,5 +1,5 @@
 import { getLocalStorage, setLocalStorage } from "./utils.mjs";
-import { convertToJson } from "./ProductData.mjs";
+import {convertToJson} from "./ProductData.mjs";
 
 /**At the moment, I'm learning about the need to create the product details class with the 
  * constructor, init, addProductToCart and renderProductDetails functions for 
@@ -12,94 +12,76 @@ export default class ProductDetails {
   //constructor functions like the parameter initializer
   constructor(productId, dataSource) {
     this.productId = productId;
-    this.dataSource = dataSource; // this is gold
+    this.dataSource = dataSource;// this is gold
     this.path = `../json/${this.dataSource.category}.json`;
     this.productsByCategory = {};
     this.product = {};
+    
   }
 
+
   async findProductDataByProductId(id) {
-    const products = await fetch(this.path)
-      .then(convertToJson)
-      .then((data) => (data.Result ? data.Result : data)); // this is becasue some of api json file have staored the data i need in Result
+    const products= await fetch(this.path)
+    .then(convertToJson)
+    .then((data) => data.Result ? data.Result : data);// this is becasue some of api json file have staored the data i need in Result
 
     return products.find(
       // for standardization search
-      (item) => item.Id === id
-    );
-  }
+      item => item.Id === id
+  )};
+
+  
 
   async init() {
+   
     this.product = await this.findProductDataByProductId(this.productId);
 
-    if (!this.product) {
-      console.error("Product not found.");
-      return;
-    }
-
     // the product details are needed before rendering the HTML
+    console.log("Products by category:", this.findProductDataByProductId(this.productId));
     console.log("Products:", this.product);
     console.log("ID:", this.productId);
     console.log("Datasource:", this.dataSource);
     console.log("Product category:", this.dataSource.category);
     console.log("Brand:", this.product.Brand);
+ 
+    
 
     this.renderProductDetails();
-
     // once the HTML is rendered, add a listener to the Add to Cart button
     // Notice the .bind(this). This callback will not work if the bind(this) is missing. Review the readings from this week on 'this' to understand why.
-    const addButton = document.getElementById("addToCart");
-    if (addButton) {
-      addButton.addEventListener("click", this.addProductToCart.bind(this));
-    }
+    document
+      .getElementById('addToCart')
+      .addEventListener('click', this.addProductToCart.bind(this));
   }
 
+  
   addProductToCart() {
     const cartItems = getLocalStorage("so-cart") || [];
-
-    // push full product into cart
     cartItems.push(this.product);
-
     setLocalStorage("so-cart", cartItems);
-
-    console.log("Product added to cart:", this.product);
   }
-
+  
   renderProductDetails() {
     productDetailsTemplate(this.product);
   }
 }
 
+
 //This function is mainly used render product details and place things in the cart.
 function productDetailsTemplate(product) {
-  document.querySelector("h2").textContent = product.Brand?.Name || "Unknown Brand";
-  document.querySelector("h3").textContent = product.NameWithoutBrand || "Unnamed Product";
+  
 
-  const productImage = document.getElementById("productImage");
+  document.querySelector('h2').textContent = product.Brand.Name;
+  document.querySelector('h3').textContent = product.NameWithoutBrand;
 
-  if (productImage) {
-    productImage.src =
-      product.Images?.PrimaryMedium || product.Image || "/images/placeholder.jpg"; // use PrimaryMedium if available, otherwise use Image
-    productImage.alt = product.NameWithoutBrand || "Product Image";
-  }
+  const productImage = document.getElementById('productImage');
+  productImage.src = product.Images ? product.Images.PrimaryMedium : product.Image; // use PrimaryMedium if available, otherwise use Image
+  productImage.alt = product.NameWithoutBrand;
 
-  const priceEl = document.getElementById("productPrice");
-  if (priceEl) {
-    priceEl.textContent = product.FinalPrice || "0";
-  }
+  document.getElementById('productPrice').textContent = product.FinalPrice;
+  document.getElementById('productColor').textContent = product.Colors[0].ColorName;
+  document.getElementById('productDesc').innerHTML = product.DescriptionHtmlSimple;
 
-  const colorEl = document.getElementById("productColor");
-  if (colorEl) {
-    colorEl.textContent = product.Colors?.[0]?.ColorName || "N/A";
-  }
-
-  const descEl = document.getElementById("productDesc");
-  if (descEl) {
-    descEl.innerHTML = product.DescriptionHtmlSimple || "";
-  }
-
-  const addButton = document.getElementById("addToCart");
-  if (addButton) {
-    addButton.dataset.id = product.Id;
-  }
+  document.getElementById('addToCart').dataset.id = product.Id;
 }
+

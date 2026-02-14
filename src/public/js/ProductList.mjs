@@ -23,10 +23,10 @@ export default class ProductList {
 
   renderProductList(products) {//this is for the list of data.
     //template is for the individual product card
-    //I hav attached the category to help me later get product details.
+    //I hav attached the category to help me later get product details. its important to be very direct
     const template = (product) => `
       <li class="product-card">
-        <a href="product_pages/?category=${this.category}&product=${product.Id}">
+      <a href="/product_pages/index.html?category=${this.category}&product=${product.Id}">
           <img 
             src="${product.Images?.PrimaryMedium || product.Image}" 
             alt="Image of ${product.NameWithoutBrand}">

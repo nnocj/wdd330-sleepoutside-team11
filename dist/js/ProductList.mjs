@@ -26,7 +26,7 @@ export default class ProductList {
     //I hav attached the category to help me later get product details.
     const template = (product) => `
       <li class="product-card">
-        <a href="product_pages/?category=${this.category}&product=${product.Id}">
+      <a href="../product_pages/?category=${this.category}&product=${product.Id}">
           <img 
             src="${product.Images?.PrimaryMedium || product.Image}" 
             alt="Image of ${product.NameWithoutBrand}">
