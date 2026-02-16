@@ -203,12 +203,7 @@ async handleSubmit() {// async because it handles fetching
     //const order = this.getServerStyleOrderData();{
     
 
-
-    //2. send the order to the wdd330 server
-    const options = {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
+    const order = {
             
             title:"Food Order",
             folder: "Food Orders",
@@ -218,9 +213,15 @@ async handleSubmit() {// async because it handles fetching
                 info: "This is a test",
                 numbers: [1, 2, 3],
                 active: true
-            },
+                }
             
-            })
+            }
+
+    //2. send the order to the wdd330 server
+    const options = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(order)
     };
 
     try {
