@@ -203,24 +203,25 @@ async handleSubmit() {// async because it handles fetching
     //const order = this.getServerStyleOrderData();{
     
 
+    const order = {
+            
+            title:"Food Order",
+            folder: "Food Orders",
+            owner: "Nicholas",
+            secret_passkey: "mySuperSecret123",
+            data: {
+                info: "This is a test",
+                numbers: [1, 2, 3],
+                active: true
+                }
+            
+            }
 
     //2. send the order to the wdd330 server
     const options = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-            
-            title:"Food Order",
-            folder: "Food Orders",
-            owner: "Nicholas",
-            secret_key: "mySuperSecret123",
-            data: {
-                info: "This is a test",
-                numbers: [1, 2, 3],
-                active: true
-            },
-            
-            })
+        body: JSON.stringify(order)
     };
 
     try {
@@ -232,7 +233,7 @@ async handleSubmit() {// async because it handles fetching
 
         const result = await response.json();
 
-        console.log("Order submitted:", result);
+        console.log(`Order data: ${order}\nServer Response: ${result}`);
 
         alert("Order placed successfully!");
 
