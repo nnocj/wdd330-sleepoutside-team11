@@ -154,8 +154,10 @@ getFullOrderData(){
 }
 
 getServerStyleOrderData(){
+    const customerData = this.formDataToJSON(this.formElement);
+    const time = new Date().getTime();
     const serverStyleData =  {
-        title:"Food Order",
+        title: `${customerData.firstName} ${customerData.lastName} order at ${time}`,
         folder: "Food Orders",
         owner: "Nicholas",
         secret_passkey: "mySuperSecret123",
