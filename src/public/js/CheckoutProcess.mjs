@@ -233,7 +233,7 @@ async handleSubmit() {// async because it handles fetching
 
         const result = await response.json();
 
-        console.log(`Order data: ${order}\nOrder submitted: ${result}`);
+        console.log(`Order data: ${order}\nServer Response: ${result}`);
 
         alert("Order placed successfully!");
 
