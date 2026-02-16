@@ -154,13 +154,14 @@ getFullOrderData(){
 }
 
 getServerStyleOrderData(){
-    const serverStyleData =  [];
-    serverStyleData["title"] = "Customer Order";
-    serverStyleData["folder"] = "customer-orders";
-    serverStyleData["owner"] = "Nicholas Commey";
-    serverStyleData["secret_passkey"] = "iloveu";
-
-    serverStyleData["data"] = this.getFullOrderData();
+    const serverStyleData =  {
+        title:"Food Order",
+        folder: "Food Orders",
+        owner: "Nicholas",
+        secret_passkey: "mySuperSecret123",
+        data: this.getFullOrderData()
+            
+        }
     return serverStyleData;
 }
 
@@ -205,17 +206,7 @@ async handleSubmit() {// async because it handles fetching
 
     /*const order = {
             
-            title:"Food Order",
-            folder: "Food Orders",
-            owner: "Nicholas",
-            secret_passkey: "mySuperSecret123",
-            data: {
-                info: "This is a test",
-                numbers: [1, 2, 3],
-                active: true
-                }
-            
-            }*/
+           */
 
     //2. send the order to the wdd330 server
     const options = {
