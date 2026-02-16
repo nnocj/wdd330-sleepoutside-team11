@@ -200,10 +200,10 @@ formDataToJSON(formElement) {
 async handleSubmit() {// async because it handles fetching
     //when the user click to submit
     //1. get the order
-    //const order = this.getServerStyleOrderData();{
+    const order = this.getServerStyleOrderData();
     
 
-    const order = {
+    /*const order = {
             
             title:"Food Order",
             folder: "Food Orders",
@@ -215,7 +215,7 @@ async handleSubmit() {// async because it handles fetching
                 active: true
                 }
             
-            }
+            }*/
 
     //2. send the order to the wdd330 server
     const options = {
