@@ -205,11 +205,6 @@ async handleSubmit() {// async because it handles fetching
     //1. get the order
     const order = this.getServerStyleOrderData();
     
-
-    /*const order = {
-            
-           */
-
     //2. send the order to the wdd330 server
     const options = {
         method: 'POST',
@@ -224,9 +219,9 @@ async handleSubmit() {// async because it handles fetching
             throw new Error("Server error");
         }
 
-        const result = await response.json();
+        this.redirectToSuccess()// to go to another page entirely
 
-        console.log(`Order data: ${order}\nServer Response: ${result}`);
+        console.log(`Order data: ${order}\nServer Response: ${response}`);
 
         alert("Order placed successfully!");
 
@@ -247,7 +242,6 @@ checkout() {
     e.preventDefault();
     this.handleSubmit();
 
-    //this.redirectToSuccess()// to go to another page entirely
   });// later i can create te validation rule
 }
 
