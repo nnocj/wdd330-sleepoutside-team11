@@ -131,6 +131,28 @@ button {
   fill: gray;
 }
 
+/* =========================
+   CART TOTAL SECTION
+========================= */
+
+.cart-price {
+  margin: 2rem 1rem;
+  padding: 0.5rem;
+  border: 2px solid var(--primary-color);
+  background-color: #fafafa;
+  text-align: center;
+}
+
+/* Total Price */
+.cart-price h2 {
+  font-family: var(--font-base);
+  font-size: var(--large-font);
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+}
+
+/* Checkout Button (inherits base button styles) */
+
 /* End cart icon styles */
 
 .mission {
@@ -261,3 +283,4 @@ footer {
   font-size: var(--small-font);
   padding: 1em;
 }
+

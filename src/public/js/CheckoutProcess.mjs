@@ -1,9 +1,16 @@
+/** Now I will leave it here with the thugh that this course focused on web frontend seperate from backend
+ * So it will appreciate using a web service or external backend to handle it's data. 
+ * This was mainly to learn how to apply OOP to build utilities.
+ * For now the for form data wont be sent. So i will create a message for the user using a try ccatch.
+ */
+
 import { getLocalStorage } from "./utils.mjs";
 
 export default class CheckoutProcess {
-  constructor(key, outputSelector) {
+  constructor(key, outputSelector, formElement) {
     this.key = key;
     this.outputSelector = outputSelector;
+    this.formElement = formElement;
     this.list = [];
     this.itemTotal = 0;
     this.shipping = 0;
@@ -11,9 +18,10 @@ export default class CheckoutProcess {
     this.orderTotal = 0;
   }
 
-  init() {
+  init() {//this looks exactly like the way the school management app of CSE240 ETC. ONE BOARD
     this.list = getLocalStorage(this.key) || [];
     this.displayOrderSummary(this.outputSelector);
+    this.checkout();
   }
 
 //calculating for the items subtotal
@@ -62,6 +70,7 @@ calculateOrderTotal() {
 displayOrderSummary(outputSelector) {// its quite intersting how i just found a use for this.
 
     const container = document.querySelector(outputSelector);
+    if (!container) return;
 
     const orderSummaryTemplate = `
                 <h2>Order Summary</h2>
@@ -71,7 +80,152 @@ displayOrderSummary(outputSelector) {// its quite intersting how i just found a 
                 <p id="ordertotal">Order Total: $${this.calculateOrderTotal().toFixed(2)}</p>
                 `;
         
-        container.innerHTML = orderSummaryTemplate;
-    }
+    container.innerHTML = orderSummaryTemplate;
 }
 
+
+//this will only display the only needed infos from each cart item
+packageCartItems() {
+    const cartItems = getLocalStorage(this.key) || [];
+
+    return cartItems.map(item => ({
+        id: item.Id,
+        name: item.Name,
+        price: parseFloat(item.FinalPrice) || 0,
+        quantity: 1
+    }));//here ii dont need string literal but direct reference and assignments
+}
+
+
+packageOrderSummary(){
+    const taxTotal = this.calculateTotalTax();
+    const shippingTotal = this.calculateShippingTotal();
+    const orderTotal = this.calculateOrderTotal();
+
+    // order summary to match the wdd330 server
+    
+    return  { 
+            orderTotal: orderTotal,
+            shipping: shippingTotal,
+            tax: taxTotal
+        }
+}
+
+
+// function to package the customer details from the form to match the wdd330 server request. This will be about the form 
+packageCustomerDetails(){
+    //get the Json formated form data
+    const customerData = this.formDataToJSON(this.formElement);
+    const currentDate = new Date();//to track the current date
+
+    //adding other details to the customer info to match the wdd330 sever expectation
+    return {
+        orderDate: currentDate,
+        fname: customerData.firstName,
+        lname: customerData.lastName,
+        street: customerData.street,
+        city: customerData.city,
+        state: customerData.state,
+        zip: customerData.zip,
+        cardNumber: "1234123412341234",
+        expiration: customerData.expDate,
+        code: "123"
+    }
+                    //I'm making card number and code fixed to match with the wdd330 api
+}
+
+// new get full order json
+getFullOrderData(){
+    //get packaged customer details and add the remaining info to it
+    const customerData = this.packageCustomerDetails();
+
+    //the remaining info to add to the customer data to become the full order data
+    const cartItems = this.packageCartItems();
+    const taxTotal = this.calculateTotalTax();
+    const shippingTotal = this.calculateShippingTotal();
+    const orderTotal = this.calculateOrderTotal();
+
+    customerData["items"] = cartItems;
+    customerData["orderTotal"] = orderTotal;
+    customerData["shipping"] = shippingTotal;
+    customerData["tax"] = taxTotal;
+
+    return customerData; // ✅ THIS WAS MISSING
+}
+
+//function to send full order details to server
+getFullOrderJson(){
+    //get the raw order data
+    const orderData = this.getFullOrderData();// this is raw data
+   
+    return orderData;// I will return the full order json containing both items and customer details
+}
+
+
+orderDataToJson(orderData){//here it will only serve as a tool.
+    return JSON.stringify(orderData);
+}
+
+
+// takes a form element and returns an object where the key is the "name" of the form input.
+formDataToJSON(formElement) {
+  const formData = new FormData(formElement),//this formData is an inbuilt JavaScript function to get form data
+    convertedJSON = {};
+
+  formData.forEach(function (value, key) {
+    convertedJSON[key] = value;//this is to create and array of each key to a value
+  });
+
+  return convertedJSON;
+}
+
+
+async handleSubmit() {// async because it handles fetching
+    //when the user click to submit
+    //1. get the order
+    const order = this.getFullOrderJson();
+
+    console.log("Order data:", order);
+
+    //2. send the order to the wdd330 server
+    const options = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(order)
+    };
+
+    try {
+        const response = await fetch("#", options);
+
+        if (!response.ok) {
+            throw new Error("Server error");
+        }
+
+        const result = await response.json();
+
+        console.log("Order submitted:", result);
+
+        alert("Order placed successfully!");
+
+    } catch (error) {
+        console.error("Submission failed:", error);
+        alert("Something went wrong. Try again.");
+    }
+
+  //ensure response to button click to check out
+}
+
+redirectToSuccess() {//this is to redirect my page to checkout/index.html
+  window.location.href = "../checkout/success.html";
+}
+
+checkout() {
+  this.formElement.addEventListener("submit", (e) => {
+    e.preventDefault();
+    this.handleSubmit();
+
+    this.redirectToSuccess()// to go to another page entirely
+  });// later i can create te validation rule
+}
+
+}
