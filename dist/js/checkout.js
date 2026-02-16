@@ -11,9 +11,8 @@ loadHeaderFooter();
 
 //listing the parameters to run the checkout process class.
 const key = "so-cart"
-const outputElement = "#order-summary"; //to display the order summary
-const formElement = document.getElementById("checkoutForm"); // to pick up form data
+const outputElement = document.querySelector("#order-summary");
 
 //I'm ensuring product summary details can be obtained.
-const checkoutProcess = new CheckoutProcess(key, outputElement, formElement);
+const checkoutProcess = new CheckoutProcess(key, outputElement);
 checkoutProcess.init();
