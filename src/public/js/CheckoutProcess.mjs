@@ -153,14 +153,31 @@ getFullOrderData(){
     return customerData; // ✅ THIS WAS MISSING
 }
 
-//function to send full order details to server
-getFullOrderJson(){
-    //get the raw order data
-    const orderData = this.getFullOrderData();// this is raw data
-   
-    return orderData;// I will return the full order json containing both items and customer details
+getServerStyleOrderData(){
+    const serverStyleData =  [];
+    serverStyleData["title"] = "Customer Order";
+    serverStyleData["folder"] = "customer-orders";
+    serverStyleData["owner"] = "Nicholas Commey";
+    serverStyleData["secret_passkey"] = "iloveu";
+
+    serverStyleData["data"] = this.getFullOrderData();
+    return serverStyleData;
 }
 
+//function to send full order details to server
+getServerStyleOrderJson(){
+    //get the raw order data
+    const orderData = this.getServerStyleOrderData();// this is raw data
+   console.log("raw data", orderData);
+
+   const jsonData = this.orderServerStyleDataToJson(orderData); console.log("jsonData", jsonData);
+    return jsonData// I will return the full order json containing both items and customer details
+}
+
+
+orderServerStyleDataToJson(orderData){//here it will only serve as a tool.
+    return JSON.stringify(orderData);
+}
 
 orderDataToJson(orderData){//here it will only serve as a tool.
     return JSON.stringify(orderData);
@@ -183,19 +200,31 @@ formDataToJSON(formElement) {
 async handleSubmit() {// async because it handles fetching
     //when the user click to submit
     //1. get the order
-    const order = this.getFullOrderJson();
+    //const order = this.getServerStyleOrderData();{
+    
 
-    console.log("Order data:", order);
 
     //2. send the order to the wdd330 server
     const options = {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(order)
+        body: JSON.stringify({
+            
+            title:"Food Order",
+            folder: "Food Orders",
+            owner: "Nicholas",
+            secret_key: "mySuperSecret123",
+            data: {
+                info: "This is a test",
+                numbers: [1, 2, 3],
+                active: true
+            },
+            
+            })
     };
 
     try {
-        const response = await fetch("#", options);
+        const response = await fetch("https://json-hub-api.onrender.com/api/documents", options);
 
         if (!response.ok) {
             throw new Error("Server error");
@@ -224,7 +253,7 @@ checkout() {
     e.preventDefault();
     this.handleSubmit();
 
-    this.redirectToSuccess()// to go to another page entirely
+    //this.redirectToSuccess()// to go to another page entirely
   });// later i can create te validation rule
 }
 
